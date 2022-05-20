@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 const Game = require("../models/Game.model");
 const idgbWebApi = require('igdb-api-node').default;
 
+const axios = require("axios");
 
-const igdbApi = idgbWebApi({
+const igdb = idgbWebApi({
     clientId: process.env.TWITCH_CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     accessToken: process.env.TWITCH_APP_ACCESS_TOKEN
@@ -14,34 +15,43 @@ const igdbApi = idgbWebApi({
 
 //GET route to fetch all games
 
-router.get("/", (req, res, next) => {
-  Game.find()
-    .then((data) => {
-      res.status("200").json(data);
-    })
-    .catch((error) => {
-      next(error);
-      res.json(error);
-    });
+router.get("/games", (req, res, next) => {
+    console.log("hello")
+    axios.post(
+        `${process.env.IGDB_API_URL}`,
+        {},
+        { 
+            headers: 
+            { 
+                'Client-ID': process.env.TWITCH_CLIENT_ID, 
+                'Authorization': ` ${process.env.TWITCH_APP_ACCESS_TOKEN}`
+            } 
+        },
+       
+    )
+    .then(response => console.log(response.data))
+    .catch(error => console.log(error))
 });
+
+
 
 //GET route for one game
 
-router.get("/:id", (req, res, next) => {
-  const { id } = req.params;
-  Game.findById(id)
+router.get("/games/:id", (req, res, next) => {
 
-    .then((foundGame) => {
-      if (foundGame) {
-        res.status("200").json(foundGame);
-      } else {
-        res.status("200").json({ message: "Game not found" });
-      }
-    })
-    .catch((error) => {
-      next(error);
-      res.json(error);
-    });
+  axios.post( `${process.env.IGDB_API_URL}/${req.params.id}`,
+  {},
+  { 
+      headers: 
+      { 
+          'Client-ID': process.env.TWITCH_CLIENT_ID, 
+          'Authorization': ` ${process.env.TWITCH_APP_ACCESS_TOKEN}`
+      } 
+  },
+ 
+)
+  .then(response => console.log(response.data))
+  .catch(error => console.log(error))
 });
 
 module.exports = router;

@@ -5,7 +5,7 @@ require("dotenv/config");
 
 // ℹ️ Connects to the database
 require("./db");
-const idgbWebApi = require('igdb-api-node').default;
+//const idgbWebApi = require('igdb-api-node').default;
 
 // Handles http requests (express is node js framework)
 // https://www.npmjs.com/package/express
@@ -14,12 +14,12 @@ const express = require("express");
 const app = express();
 
 
-const igdbApi = idgbWebApi({
-    clientId: process.env.TWITCH_CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    accessToken: process.env.TWITCH_APP_ACCESS_TOKEN
+// const igdbApi = idgbWebApi({
+//     clientId: process.env.TWITCH_CLIENT_ID,
+//     clientSecret: process.env.CLIENT_SECRET,
+//     accessToken: process.env.TWITCH_APP_ACCESS_TOKEN
 
-});
+// });
 
 
 
