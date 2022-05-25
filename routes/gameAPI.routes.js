@@ -18,7 +18,7 @@ router.post('/games', async (req, res) => {
                 'Client-ID': process.env.TWITCH_CLIENT_ID,
                 'Authorization': process.env.TWITCH_APP_ACCESS_TOKEN
             },
-            data: `fields id, name, summary, cover, first_release_date; search "${search}";`
+            data: `fields id, name, summary, cover, platforms.name, genres, similar_games, involved_companies.company.name, involved_companies, rating, total_rating_count, franchise, first_release_date; search "${search}";`
         })
        
 
@@ -68,7 +68,7 @@ router.get('/games/:gameId', async (req, res) => {
                 'Client-ID': process.env.TWITCH_CLIENT_ID,
                 'Authorization': process.env.TWITCH_APP_ACCESS_TOKEN
             },
-            data: `fields name, summary, cover, first_release_date; where version_parent = null; where id = ${gameId};`
+            data: `fields name, summary, franchise, platforms.name, genres, similar_games, involved_companies.company.name, total_rating_count, rating, cover, first_release_date; where version_parent = null; where id = ${gameId};`
         })
 
         // GET Cover Data
@@ -83,7 +83,19 @@ router.get('/games/:gameId', async (req, res) => {
             data: `fields cover.image_id, url; where game = (${gameResponse.data[0].id});`
         })
 
-        const combinedData = mergeGameAndImageData(gameResponse.data, imageResponse.data)
+     //   GET Franchise Data
+        const franchiseResponse = await axios({
+            url: process.env.IGDB_API_URL_FRANCHISE,
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Client-ID': process.env.TWITCH_CLIENT_ID,
+                'Authorization': process.env.TWITCH_APP_ACCESS_TOKEN
+            },
+            data: `fields name, url; where game = (${gameResponse.data[0].id});`
+        })
+
+        const combinedData = mergeGameAndImageData(gameResponse.data, imageResponse.data, franchiseResponse.data )
 
         res.send(combinedData)
     }
@@ -91,5 +103,7 @@ router.get('/games/:gameId', async (req, res) => {
         res.status(400).send({error: error.message})
     }
 })
+
+
 
 module.exports = router

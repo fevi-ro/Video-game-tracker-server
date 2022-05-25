@@ -17,7 +17,10 @@ router.post("/adventures", isAuthenticated, (req, res, next) => {
     played,
     gameListId,
     personalRating,
-   
+   totalRating, 
+   description,
+   summary
+
   } = req.body;
 
   const newAdventure = {name,
@@ -27,8 +30,10 @@ router.post("/adventures", isAuthenticated, (req, res, next) => {
   notes,
     played,
     gameListId,
-    personalRating
-
+    personalRating,
+    totalRating,
+   description,
+   summary
   }
 
   if (!name) {
@@ -105,7 +110,10 @@ router.put("/adventures/:advId", isAuthenticated, (req, res, next) => {
   notes,
     played,
     gameListId,
-    personalRating
+    personalRating,
+    totalRating, 
+    description,
+    summary
   } = req.body;
 
 

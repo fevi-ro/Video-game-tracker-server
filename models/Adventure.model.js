@@ -11,12 +11,12 @@ const adventureSchema = new Schema({
       difficulty: String,
       date: String,
       notes: String,
-      played: Boolean,
+      played: String,
       gameListId: String,
       personalRating: Number,
-      // user: {
-      //   type: mongoose.Schema.Types.ObjectId,
-      //    ref: "User" }
+    totalRating: Number,
+    description: String,
+    summary: String
   });
 
 
