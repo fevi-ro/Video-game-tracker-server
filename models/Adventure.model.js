@@ -16,7 +16,11 @@ const adventureSchema = new Schema({
       personalRating: Number,
     totalRating: Number,
     description: String,
-    summary: String
+    summary: String,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User' 
+  }
   });
 
 

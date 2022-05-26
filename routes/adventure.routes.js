@@ -3,9 +3,10 @@ const mongoose = require("mongoose");
 const Adventure = require("../models/Adventure.model");
 const User = require("../models/User.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
+const { populate } = require("../models/Adventure.model");
+const isOwner = require("../middleware/isOwner");
 
-
-// CREATE EVENT
+// CREATE ADVENTURE
 
 router.post("/adventures", isAuthenticated, (req, res, next) => {
   const {
@@ -23,6 +24,8 @@ router.post("/adventures", isAuthenticated, (req, res, next) => {
 
   } = req.body;
 
+  const user = req.payload._id;
+
   const newAdventure = {name,
     image,
     difficulty,
@@ -33,7 +36,8 @@ router.post("/adventures", isAuthenticated, (req, res, next) => {
     personalRating,
     totalRating,
    description,
-   summary
+   summary,
+  user
   }
 
   if (!name) {
@@ -52,7 +56,7 @@ router.post("/adventures", isAuthenticated, (req, res, next) => {
 //GET ADVENTURES
 
 router.get("/adventures", isAuthenticated, (req, res, next) => {
-  Adventure.find()
+  Adventure.find({ user: req.payload._id }) //({ user: req.user.id })
     .then((data) => {
       res.status(200).json(data);
     })
@@ -68,7 +72,7 @@ router.get("/adventures", isAuthenticated, (req, res, next) => {
 
 //GET SINGLE ADVENTURE
 
-router.get("/adventures/:advId", isAuthenticated, (req, res, next) => {
+router.get("/adventures/:advId", isAuthenticated, isOwner, (req, res, next) => {
   const { advId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(advId)) {
@@ -79,6 +83,7 @@ router.get("/adventures/:advId", isAuthenticated, (req, res, next) => {
 
 
   Adventure.findById(advId)
+  .populate("user")
     .then((foundAdventure) => {
       res.status(200).json(foundAdventure);
     })
@@ -92,7 +97,7 @@ router.get("/adventures/:advId", isAuthenticated, (req, res, next) => {
 
 //EDIT SINGLE ADVENTURE
 
-router.put("/adventures/:advId", isAuthenticated, (req, res, next) => {
+router.put("/adventures/:advId", isAuthenticated, isOwner, (req, res, next) => {
   const { advId } = req.params;
 
 
@@ -131,7 +136,7 @@ router.put("/adventures/:advId", isAuthenticated, (req, res, next) => {
 
 //DELETE SINGLE ADVENTURE
 
-router.delete("/adventures/:advId", isAuthenticated, (req, res, next) => {
+router.delete("/adventures/:advId", isAuthenticated, isOwner, (req, res, next) => {
   const { advId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(advId)) {
