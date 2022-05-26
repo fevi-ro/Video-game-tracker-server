@@ -31,8 +31,6 @@ router.post('/signup', (req, res, next) => {
         // If the user with the same email already exists, send an error response
         // If the user with the same email already exists, we need to stop the promise chain
         if (foundUser) {
-            res.status(400).json({ message: "User already exists." });
-            return;
             const customError = new Error();
             customError.name = "userExists";
             customError.message = "User already exists.";
@@ -56,9 +54,6 @@ router.post('/signup', (req, res, next) => {
             res.status(201).json({ user: user });
         })
         .catch(err => {
-            console.log("error creating new user", err);
-            res.status(500).json({ message: "Internal Server Error: error creating new user" })
-            console.log("error creating new user... ", err);
             if(err.name === "userExists"){
                 res.status(400).json({ message: err.message });
             } else {
