@@ -10,7 +10,7 @@ router.post('/signup', (req, res, next) => {
     const { email, password } = req.body;
     // Check if email or password or name are provided as empty string 
     if (email === '' || password === '') {
-        res.status(400).json({ message: "Provide email, password and name" });
+        res.status(400).json({ message: "Provide email and password" });
         return;
     }
     // Use regex to validate the email format
@@ -27,17 +27,17 @@ router.post('/signup', (req, res, next) => {
     }
     // Check the users collection if a user with the same email already exists
     User.findOne({ email })
-        .then((foundUser) => {
-            // If the user with the same email already exists, send an error response
-            // If the user with the same email already exists, we need to stop the promise chain
-            if (foundUser) {
-                res.status(400).json({ message: "User already exists." });
-                return;
-                const customError = new Error();
-                customError.name = "userExists";
-                customError.message = "User already exists.";
-                throw customError; //we throw an error to break the promise chain (ie. to avoid going to the next .then() )
-            }
+    .then((foundUser) => {
+        // If the user with the same email already exists, send an error response
+        // If the user with the same email already exists, we need to stop the promise chain
+        if (foundUser) {
+            res.status(400).json({ message: "User already exists." });
+            return;
+            const customError = new Error();
+            customError.name = "userExists";
+            customError.message = "User already exists.";
+            throw customError; //we throw an error to break the promise chain (ie. to avoid going to the next .then() )
+        }
 
             // If email is unique, proceed to hash the password
             const salt = bcrypt.genSaltSync(saltRounds);
