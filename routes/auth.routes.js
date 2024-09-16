@@ -90,7 +90,7 @@ router.post('/login', (req, res, next) => {
                 const authToken = jwt.sign(
                     payload,
                     process.env.TOKEN_SECRET,
-                    { algorithm: 'HS256', expiresIn: "6h" }
+                    { algorithm: 'HS256', expiresIn: '365d' }
                 );
                 // Send the token as the response
                 res.json({ authToken: authToken });
