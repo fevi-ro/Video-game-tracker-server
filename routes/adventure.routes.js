@@ -158,4 +158,5 @@ router.delete("/adventures/:advId", isAuthenticated, isOwner, (req, res, next) =
     });
 });
 
+//comment
 module.exports = router;
