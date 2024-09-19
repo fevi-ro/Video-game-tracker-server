@@ -8,13 +8,13 @@ require("./db");
 const express = require("express");
 
 const app = express();
-
+/*
 var Parse = require('parse/node');
 
 Parse.initialize("DaHDbzfBuszb3y0h3KS8F4Owrf8Cfl4JxFccJKxP","786fVTu3YotR6J3iqN8qabqGPp1chc5OPAlfHOeO"); //PASTE HERE YOUR Back4App APPLICATION ID AND YOUR JavaScript KEY
 Parse.serverURL = 'https://parseapi.back4app.com/'
 
-
+*/
     
 
 

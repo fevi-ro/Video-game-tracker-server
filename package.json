@@ -21,6 +21,7 @@
     "mongoose": "^6.3.3",
     "morgan": "^1.10.0",
     "parse": "^5.3.0",
+    "react-scripts": "^5.0.1",
     "update-dotenv": "^1.1.1"
   },
   "devDependencies": {
